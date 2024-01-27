@@ -20,7 +20,7 @@ const Box = ({
   const handleMouseDown = (e: React.MouseEvent) => {
     startPosition = { x: e.clientX, y: e.clientY };
 
-    document.getElementById(id.toString()).style.zIndex = 100;
+    document.getElementById(id.toString())!.style.zIndex = "100";
 
     document.addEventListener("mousemove", handleMouseMove);
     document.addEventListener("mouseup", handleMouseUp);
@@ -106,7 +106,7 @@ const Box = ({
     // }
     setTranslate({ x: 0, y: 0 });
 
-    document.getElementById(id.toString()).style.zIndex = 0;
+    document.getElementById(id.toString())!.style.zIndex = "0";
 
     document.removeEventListener("mousemove", handleMouseMove);
     document.removeEventListener("mouseup", handleMouseUp);
