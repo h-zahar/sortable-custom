@@ -31,9 +31,9 @@ const Box = ({
       x: e.clientX - startPosition.x,
       y: e.clientY - startPosition.y,
     });
-    console.log(
-      index + Math.max(Math.floor(Math.abs(startPosition.y - e.clientY) / 100))
-    );
+    // console.log(
+    //   index + Math.max(Math.floor(Math.abs(startPosition.y - e.clientY) / 100))
+    // );
     Math.floor(Math.abs(startPosition.y - e.clientY) / 100) === 0 &&
       (document.getElementById("indicator")!.style.display! = "none");
 
@@ -72,7 +72,11 @@ const Box = ({
   };
 
   const handleMouseUp = (e: MouseEvent) => {
-    console.log(Math.abs(startPosition.y - e.clientY) / 100);
+    // console.log(Math.abs(startPosition.y - e.clientY) / 100);
+    setTimeout(
+      () => (document.getElementById("indicator")!.style.display! = "none"),
+      200
+    );
     // if (
     //   Math.ceil(Math.abs(startPosition.y - e.clientY) / 100) > index ||
     //   (startPosition.y - e.clientY < 0 &&
