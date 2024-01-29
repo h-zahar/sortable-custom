@@ -13,23 +13,19 @@ const MakeSortable = ({
 }) => {
   const [indicatorPosition, setIndicatorPosition] = useState({ x: 0, y: 0 });
 
-  const doesHandlerExist = [...document.getElementsByClassName("handler")]
-    .length;
-
-  const doesContainerExist = document.getElementById("box");
-
   useEffect(
     () => {
-      [...document.getElementsByClassName("handler")].forEach((elem) =>
-        (elem as HTMLDivElement).addEventListener("mousedown", handleMouseDown)
-      );
+      [...document.getElementsByClassName("handler")].forEach((elem, i) => {
+        elem.setAttribute("data-index", i + "");
+        (elem as HTMLElement).addEventListener("mousedown", handleMouseDown);
+      });
       document.getElementById("box") &&
         [...document.getElementById("box")!.children].map((elem, i) =>
-          elem.setAttribute("index", i + "")
+          elem.setAttribute("data-index", i + "")
         );
     },
     // eslint-disable-next-line
-    [children, doesHandlerExist, doesContainerExist]
+    []
   );
 
   if (!children.length) return <></>;
@@ -41,16 +37,16 @@ const MakeSortable = ({
   const handleMouseDown = (e: MouseEvent) => {
     startPosition = { x: e.clientX, y: e.clientY };
 
-    currentElement = (e.currentTarget! as HTMLDivElement)!.parentNode
-      ?.parentNode;
-
     index = Number(
-      ((e.currentTarget! as HTMLDivElement)!.parentNode
-        ?.parentNode as HTMLDivElement)!.getAttribute("index")
+      (e.currentTarget! as HTMLElement)!.getAttribute("data-index")
     );
 
-    (currentElement as HTMLDivElement)!.style.zIndex = "100";
-    (currentElement as HTMLDivElement)!.style.opacity = "0.6";
+    currentElement = [...document.getElementById("box")!.children].find(
+      (elem) => elem.getAttribute("data-index") === index.toString()
+    );
+
+    (currentElement as HTMLElement)!.style.zIndex = "100";
+    (currentElement as HTMLElement)!.style.opacity = "0.6";
 
     document.addEventListener("mousemove", handleMouseMove);
     document.addEventListener("mouseup", handleMouseUp);
