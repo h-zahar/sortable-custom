@@ -7,7 +7,7 @@ function App() {
 
   return (
     <div>
-      <p>Sortable Custom</p>
+      <p style={{ userSelect: "none" }}>Sortable Custom</p>
       <MakeSortable items={array} setItems={setArray} />
     </div>
   );
