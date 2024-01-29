@@ -21,12 +21,14 @@ const Box = ({
     startPosition = { x: e.clientX, y: e.clientY };
 
     document.getElementById(id.toString())!.style.zIndex = "100";
+    document.getElementById(id.toString())!.style.opacity = "0.8";
 
     document.addEventListener("mousemove", handleMouseMove);
     document.addEventListener("mouseup", handleMouseUp);
   };
 
   const handleMouseMove = (e: MouseEvent) => {
+    document.getElementById(id.toString())!.style.opacity = "0.8";
     setTranslate({
       x: e.clientX - startPosition.x,
       y: e.clientY - startPosition.y,
@@ -38,10 +40,7 @@ const Box = ({
       (document.getElementById("indicator")!.style.display! = "none");
 
     if (Math.floor(Math.abs(startPosition.y - e.clientY) / 100) !== 0) {
-      setTimeout(
-        () => (document.getElementById("indicator")!.style.display! = "block"),
-        100
-      );
+      document.getElementById("indicator")!.style.display! = "block";
       setIndicatorPosition({
         x: indicatorPosition.x,
         y:
@@ -73,10 +72,13 @@ const Box = ({
 
   const handleMouseUp = (e: MouseEvent) => {
     // console.log(Math.abs(startPosition.y - e.clientY) / 100);
+
     setTimeout(
-      () => (document.getElementById("indicator")!.style.display! = "none"),
-      200
+      () => (document.getElementById(id.toString())!.style.opacity = "1"),
+      500
     );
+
+    document.getElementById("indicator")!.style.display! = "none";
     // if (
     //   Math.ceil(Math.abs(startPosition.y - e.clientY) / 100) > index ||
     //   (startPosition.y - e.clientY < 0 &&
