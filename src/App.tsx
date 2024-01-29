@@ -8,6 +8,7 @@ function App() {
   const [items, setItems] = useState(
     array.map((elem) => (
       <div
+        key={elem}
         style={{
           width: 300,
           height: 50,

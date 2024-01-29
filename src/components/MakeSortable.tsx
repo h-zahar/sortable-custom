@@ -13,23 +13,6 @@ const MakeSortable = ({
 }) => {
   const [indicatorPosition, setIndicatorPosition] = useState({ x: 0, y: 0 });
 
-  useEffect(
-    () => {
-      [...document.getElementsByClassName("handler")].forEach((elem, i) => {
-        elem.setAttribute("data-index", i + "");
-        (elem as HTMLElement).addEventListener("mousedown", handleMouseDown);
-      });
-      document.getElementById("box") &&
-        [...document.getElementById("box")!.children].map((elem, i) =>
-          elem.setAttribute("data-index", i + "")
-        );
-    },
-    // eslint-disable-next-line
-    []
-  );
-
-  if (!children.length) return <></>;
-
   let currentElement = null;
   let index = -1;
   let startPosition = { x: 0, y: 0 };
@@ -138,6 +121,37 @@ const MakeSortable = ({
     document.removeEventListener("mouseup", handleMouseUp);
   };
 
+  useEffect(
+    () => {
+      [...document.getElementsByClassName("handler")].forEach((elem, i) => {
+        elem.setAttribute("data-index", i + "");
+        (elem as HTMLElement).addEventListener("mousedown", handleMouseDown);
+      });
+      document.getElementById("box") &&
+        [...document.getElementById("box")!.children].map((elem, i) =>
+          elem.setAttribute("data-index", i + "")
+        );
+      console.log("Called!!");
+
+      return () => {
+        [...document.getElementsByClassName("handler")].forEach((elem) => {
+          elem.removeAttribute("data-index");
+          (elem as HTMLElement).removeEventListener(
+            "mousedown",
+            handleMouseDown
+          );
+        });
+        document.getElementById("box") &&
+          [...document.getElementById("box")!.children].map((elem) =>
+            elem.removeAttribute("data-index")
+          );
+      };
+    },
+    // eslint-disable-next-line
+    [array]
+  );
+
+  if (!children.length) return <></>;
   return (
     <div>
       <div
