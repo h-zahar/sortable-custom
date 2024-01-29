@@ -21,14 +21,14 @@ const Box = ({
     startPosition = { x: e.clientX, y: e.clientY };
 
     document.getElementById(id.toString())!.style.zIndex = "100";
-    document.getElementById(id.toString())!.style.opacity = "0.8";
+    document.getElementById(id.toString())!.style.opacity = "0.6";
 
     document.addEventListener("mousemove", handleMouseMove);
     document.addEventListener("mouseup", handleMouseUp);
   };
 
   const handleMouseMove = (e: MouseEvent) => {
-    document.getElementById(id.toString())!.style.opacity = "0.8";
+    document.getElementById(id.toString())!.style.opacity = "0.6";
     setTranslate({
       x: e.clientX - startPosition.x,
       y: e.clientY - startPosition.y,
@@ -40,7 +40,10 @@ const Box = ({
       (document.getElementById("indicator")!.style.display! = "none");
 
     if (Math.floor(Math.abs(startPosition.y - e.clientY) / 100) !== 0) {
-      document.getElementById("indicator")!.style.display! = "block";
+      setTimeout(
+        () => (document.getElementById("indicator")!.style.display! = "block"),
+        10
+      );
       setIndicatorPosition({
         x: indicatorPosition.x,
         y:
@@ -72,7 +75,10 @@ const Box = ({
 
   const handleMouseUp = (e: MouseEvent) => {
     // console.log(Math.abs(startPosition.y - e.clientY) / 100);
-
+    setTimeout(
+      () => (document.getElementById("indicator")!.style.display! = "none"),
+      20
+    );
     setTimeout(
       () => (document.getElementById(id.toString())!.style.opacity = "1"),
       500
