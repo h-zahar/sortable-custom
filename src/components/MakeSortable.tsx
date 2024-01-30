@@ -18,6 +18,8 @@ const MakeSortable = ({
   let index = -1;
   let startPosition = { x: 0, y: 0 };
   let unitDistance = -1;
+  let unitBoxDistance = -1;
+  let unitGapDistance = -1;
 
   const handleMouseDown = (e: MouseEvent) => {
     startPosition = { x: e.clientX, y: e.clientY };
@@ -37,6 +39,15 @@ const MakeSortable = ({
           .getComputedStyle((currentElement as HTMLElement)!)
           .marginBottom.split("px")[0]
       );
+    unitBoxDistance = Number(
+      (currentElement as HTMLElement)!.getBoundingClientRect().height
+    );
+
+    unitGapDistance = Number(
+      window
+        .getComputedStyle((currentElement as HTMLElement)!)
+        .marginBottom.split("px")[0]
+    );
 
     (currentElement as HTMLElement)!.style.zIndex = "100";
     (currentElement as HTMLElement)!.style.opacity = "0.6";
@@ -89,7 +100,9 @@ const MakeSortable = ({
                           )
                         : array.length - 1
                     ]?.getBoundingClientRect().y
-                ) + 75
+                ) +
+                unitBoxDistance +
+                unitGapDistance / 2
               : Number(
                   document
                     .getElementById("box")
@@ -102,7 +115,8 @@ const MakeSortable = ({
                           index
                         )
                     ]?.getBoundingClientRect().y
-                ) - 25,
+                ) -
+                unitGapDistance / 2,
         });
     }
   };

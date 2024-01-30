@@ -12,6 +12,7 @@
   height: 5px;
   background: blue;
   width: 300px;
+  z-index: 200;
 }
 
 .styles-box-container {
