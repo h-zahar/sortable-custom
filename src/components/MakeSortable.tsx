@@ -38,8 +38,6 @@ const MakeSortable = ({
           .marginBottom.split("px")[0]
       );
 
-    console.log(unitDistance);
-
     (currentElement as HTMLElement)!.style.zIndex = "100";
     (currentElement as HTMLElement)!.style.opacity = "0.6";
 
