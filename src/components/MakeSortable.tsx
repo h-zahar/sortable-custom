@@ -156,7 +156,7 @@ const MakeSortable = ({
       };
     },
     // eslint-disable-next-line
-    [array]
+    [children]
   );
 
   if (!children.length) return <></>;
