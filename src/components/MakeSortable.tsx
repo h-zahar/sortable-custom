@@ -6,8 +6,8 @@ const MakeSortable = ({
   isIndicator = true,
   children,
 }: {
-  array: ReactElement[];
-  onSort: (array: ReactElement[]) => void;
+  array: number[];
+  onSort: (array: number[]) => void;
   isIndicator?: boolean;
   children: ReactElement[];
 }) => {
@@ -140,7 +140,6 @@ const MakeSortable = ({
         [...document.getElementById("box")!.children].map((elem, i) =>
           elem.setAttribute("data-index", i + "")
         );
-      console.log("Called!!");
 
       return () => {
         [...document.getElementsByClassName("handler")].forEach((elem) => {
