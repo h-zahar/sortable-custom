@@ -22,7 +22,7 @@ function App() {
         isIndicator={true}
       >
         {array.map((item) => {
-          return <Item item={item} />;
+          return <Item key={item.id} item={item} />;
         })}
       </MakeSortable>
     </div>

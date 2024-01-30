@@ -17,6 +17,7 @@ const MakeSortable = ({
   let currentElement = null;
   let index = -1;
   let startPosition = { x: 0, y: 0 };
+  let unitDistance = -1;
 
   const handleMouseDown = (e: MouseEvent) => {
     startPosition = { x: e.clientX, y: e.clientY };
@@ -28,6 +29,16 @@ const MakeSortable = ({
     currentElement = [...document.getElementById("box")!.children].find(
       (elem) => elem.getAttribute("data-index") === index.toString()
     );
+
+    unitDistance =
+      Number((currentElement as HTMLElement)!.getBoundingClientRect().height) +
+      Number(
+        window
+          .getComputedStyle((currentElement as HTMLElement)!)
+          .marginBottom.split("px")[0]
+      );
+
+    console.log(unitDistance);
 
     (currentElement as HTMLElement)!.style.zIndex = "100";
     (currentElement as HTMLElement)!.style.opacity = "0.6";
@@ -42,10 +53,12 @@ const MakeSortable = ({
       e.clientX - startPosition.x
     }px, ${e.clientY - startPosition.y}px)`;
 
-    Math.floor(Math.abs(startPosition.y - e.clientY) / 100) === 0 &&
+    Math.floor(Math.abs(startPosition.y - e.clientY) / unitDistance) === 0 &&
       (document.getElementById("indicator")!.style.display! = "none");
 
-    if (Math.floor(Math.abs(startPosition.y - e.clientY) / 100) !== 0) {
+    if (
+      Math.floor(Math.abs(startPosition.y - e.clientY) / unitDistance) !== 0
+    ) {
       isIndicator &&
         setTimeout(
           () =>
@@ -65,14 +78,15 @@ const MakeSortable = ({
                       index +
                         Math.max(
                           Math.floor(
-                            Math.abs(startPosition.y - e.clientY) / 100
+                            Math.abs(startPosition.y - e.clientY) / unitDistance
                           )
                         ) <=
                       array.length - 1
                         ? index +
                           Math.max(
                             Math.floor(
-                              Math.abs(startPosition.y - e.clientY) / 100
+                              Math.abs(startPosition.y - e.clientY) /
+                                unitDistance
                             )
                           )
                         : array.length - 1
@@ -85,7 +99,7 @@ const MakeSortable = ({
                       index -
                         Math.min(
                           Math.floor(
-                            Math.abs(startPosition.y - e.clientY) / 100
+                            Math.abs(startPosition.y - e.clientY) / unitDistance
                           ),
                           index
                         )
@@ -112,14 +126,16 @@ const MakeSortable = ({
     startPosition.y - e.clientY < 0
       ? tempArr.splice(
           index +
-            Math.max(Math.floor(Math.abs(startPosition.y - e.clientY) / 100)),
+            Math.max(
+              Math.floor(Math.abs(startPosition.y - e.clientY) / unitDistance)
+            ),
           0,
           elem[0]
         )
       : tempArr.splice(
           index -
             Math.min(
-              Math.floor(Math.abs(startPosition.y - e.clientY) / 100),
+              Math.floor(Math.abs(startPosition.y - e.clientY) / unitDistance),
               index
             ),
           0,
@@ -165,14 +181,9 @@ const MakeSortable = ({
     <div>
       <div
         id="indicator"
+        className="styles-indicator"
         style={{
-          display: "none",
-          position: "absolute",
           top: indicatorPosition.y,
-          left: "calc(50% - 150px)",
-          height: "5px",
-          background: "blue",
-          width: 300,
         }}
       ></div>
       <div id="box">{children}</div>
