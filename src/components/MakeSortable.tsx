@@ -186,13 +186,7 @@ const MakeSortable = ({
   if (!children.length) return <></>;
   return (
     <div ref={containerRef}>
-      <div
-        ref={indicatorRef}
-        className="styles-indicator"
-        // style={{
-        //   top: indicatorPosition.y,
-        // }}
-      ></div>
+      <div ref={indicatorRef} className="styles-indicator"></div>
       <div ref={boxRef}>{children}</div>
     </div>
   );
