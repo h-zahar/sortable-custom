@@ -1,4 +1,4 @@
-import { ReactElement, useEffect, useState } from "react";
+import { ReactElement, useEffect, useRef, useState } from "react";
 import { TSingleItem } from "../types/item";
 
 const MakeSortable = ({
@@ -28,28 +28,25 @@ const MakeSortable = ({
       (e.currentTarget! as HTMLElement)!.getAttribute("data-index")
     );
 
-    currentElement = [...document.getElementById("box")!.children].find(
+    currentElement = [...boxRef.current!.children].find(
       (elem) => elem.getAttribute("data-index") === index.toString()
     );
 
     unitDistance =
       Number((currentElement as HTMLElement)!.getBoundingClientRect().height) +
       Number(
-        document.getElementById("box")!.children[1].getBoundingClientRect().y -
-          (document.getElementById("box")!.children[0].getBoundingClientRect()
-            .y +
-            document.getElementById("box")!.children[0].getBoundingClientRect()
-              .height)
+        boxRef.current!.children[1].getBoundingClientRect().y -
+          (boxRef.current!.children[0].getBoundingClientRect().y +
+            boxRef.current!.children[0].getBoundingClientRect().height)
       );
     unitBoxDistance = Number(
       (currentElement as HTMLElement)!.getBoundingClientRect().height
     );
 
     unitGapDistance = Number(
-      document.getElementById("box")!.children[1].getBoundingClientRect().y -
-        (document.getElementById("box")!.children[0].getBoundingClientRect().y +
-          document.getElementById("box")!.children[0].getBoundingClientRect()
-            .height)
+      boxRef.current!.children[1].getBoundingClientRect().y -
+        (boxRef.current!.children[0].getBoundingClientRect().y +
+          boxRef.current!.children[0].getBoundingClientRect().height)
     );
 
     (currentElement as HTMLElement)!.style.zIndex = "100";
@@ -84,40 +81,35 @@ const MakeSortable = ({
           y:
             startPosition.y - e.clientY < 0
               ? Number(
-                  document
-                    .getElementById("box")
-                    ?.children[
-                      index +
+                  boxRef.current?.children[
+                    index +
+                      Math.max(
+                        Math.floor(
+                          Math.abs(startPosition.y - e.clientY) / unitDistance
+                        )
+                      ) <=
+                    array.length - 1
+                      ? index +
                         Math.max(
                           Math.floor(
                             Math.abs(startPosition.y - e.clientY) / unitDistance
                           )
-                        ) <=
-                      array.length - 1
-                        ? index +
-                          Math.max(
-                            Math.floor(
-                              Math.abs(startPosition.y - e.clientY) /
-                                unitDistance
-                            )
-                          )
-                        : array.length - 1
-                    ]?.getBoundingClientRect().y
+                        )
+                      : array.length - 1
+                  ]?.getBoundingClientRect().y
                 ) +
                 unitBoxDistance +
                 unitGapDistance / 2
               : Number(
-                  document
-                    .getElementById("box")
-                    ?.children[
-                      index -
-                        Math.min(
-                          Math.floor(
-                            Math.abs(startPosition.y - e.clientY) / unitDistance
-                          ),
-                          index
-                        )
-                    ]?.getBoundingClientRect().y
+                  boxRef.current?.children[
+                    index -
+                      Math.min(
+                        Math.floor(
+                          Math.abs(startPosition.y - e.clientY) / unitDistance
+                        ),
+                        index
+                      )
+                  ]?.getBoundingClientRect().y
                 ) -
                 unitGapDistance / 2,
         });
@@ -168,8 +160,8 @@ const MakeSortable = ({
         elem.setAttribute("data-index", i + "");
         (elem as HTMLElement).addEventListener("mousedown", handleMouseDown);
       });
-      document.getElementById("box") &&
-        [...document.getElementById("box")!.children].map((elem, i) =>
+      boxRef.current &&
+        [...boxRef.current!.children].map((elem, i) =>
           elem.setAttribute("data-index", i + "")
         );
 
@@ -181,8 +173,8 @@ const MakeSortable = ({
             handleMouseDown
           );
         });
-        document.getElementById("box") &&
-          [...document.getElementById("box")!.children].map((elem) =>
+        boxRef!.current &&
+          [...boxRef!.current!.children].map((elem) =>
             elem.removeAttribute("data-index")
           );
       };
@@ -190,6 +182,7 @@ const MakeSortable = ({
     // eslint-disable-next-line
     [children]
   );
+  const boxRef = useRef<HTMLDivElement>(null);
 
   if (!children.length) return <></>;
   return (
@@ -201,7 +194,7 @@ const MakeSortable = ({
           top: indicatorPosition.y,
         }}
       ></div>
-      <div id="box">{children}</div>
+      <div ref={boxRef}>{children}</div>
     </div>
   );
 };
