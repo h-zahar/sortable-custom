@@ -1,4 +1,4 @@
-import { ReactElement, useEffect, useRef, useState } from "react";
+import { ReactElement, useEffect, useRef } from "react";
 import { TSingleItem } from "../types/item";
 
 const MakeSortable = ({
@@ -12,17 +12,18 @@ const MakeSortable = ({
   isIndicator?: boolean;
   children: ReactElement[];
 }) => {
-  const [indicatorPosition, setIndicatorPosition] = useState({ x: 0, y: 0 });
-
   let currentElement = null;
   let index = -1;
   let startPosition = { x: 0, y: 0 };
   let unitDistance = -1;
   let unitBoxDistance = -1;
   let unitGapDistance = -1;
+  let initialIndicatorTop = 0;
 
   const handleMouseDown = (e: MouseEvent) => {
     startPosition = { x: e.clientX, y: e.clientY };
+    initialIndicatorTop = boxRef.current!.getBoundingClientRect().y;
+    indicatorRef.current!.style.top = `${initialIndicatorTop}px`;
 
     index = Number(
       (e.currentTarget! as HTMLElement)!.getAttribute("data-index")
@@ -63,22 +64,16 @@ const MakeSortable = ({
     }px, ${e.clientY - startPosition.y}px)`;
 
     Math.floor(Math.abs(startPosition.y - e.clientY) / unitDistance) === 0 &&
-      (document.getElementById("indicator")!.style.display! = "none");
+      (indicatorRef.current!.style.display! = "none");
 
     if (
       Math.floor(Math.abs(startPosition.y - e.clientY) / unitDistance) !== 0
     ) {
       isIndicator &&
-        setTimeout(
-          () =>
-            (document.getElementById("indicator")!.style.display! = "block"),
-          10
-        );
+        setTimeout(() => (indicatorRef.current!.style.display! = "block"), 10);
 
-      isIndicator &&
-        setIndicatorPosition({
-          x: indicatorPosition.x,
-          y:
+      isIndicator
+        ? (indicatorRef.current!.style.top = `${
             startPosition.y - e.clientY < 0
               ? Number(
                   boxRef.current?.children[
@@ -111,16 +106,14 @@ const MakeSortable = ({
                       )
                   ]?.getBoundingClientRect().y
                 ) -
-                unitGapDistance / 2,
-        });
+                unitGapDistance / 2
+          }px`)
+        : null;
     }
   };
 
   const handleMouseUp = (e: MouseEvent) => {
-    setTimeout(
-      () => (document.getElementById("indicator")!.style.display! = "none"),
-      20
-    );
+    setTimeout(() => (indicatorRef.current!.style.display! = "none"), 20);
 
     currentElement!.style.opacity = "1";
 
@@ -156,23 +149,27 @@ const MakeSortable = ({
 
   useEffect(
     () => {
-      [...document.getElementsByClassName("handler")].forEach((elem, i) => {
-        elem.setAttribute("data-index", i + "");
-        (elem as HTMLElement).addEventListener("mousedown", handleMouseDown);
-      });
+      [...boxRef.current!.getElementsByClassName("handler")].forEach(
+        (elem, i) => {
+          elem.setAttribute("data-index", i + "");
+          (elem as HTMLElement).addEventListener("mousedown", handleMouseDown);
+        }
+      );
       boxRef.current &&
         [...boxRef.current!.children].map((elem, i) =>
           elem.setAttribute("data-index", i + "")
         );
 
       return () => {
-        [...document.getElementsByClassName("handler")].forEach((elem) => {
-          elem.removeAttribute("data-index");
-          (elem as HTMLElement).removeEventListener(
-            "mousedown",
-            handleMouseDown
-          );
-        });
+        [...boxRef!.current!.getElementsByClassName("handler")].forEach(
+          (elem) => {
+            elem.removeAttribute("data-index");
+            (elem as HTMLElement).removeEventListener(
+              "mousedown",
+              handleMouseDown
+            );
+          }
+        );
         boxRef!.current &&
           [...boxRef!.current!.children].map((elem) =>
             elem.removeAttribute("data-index")
@@ -183,16 +180,18 @@ const MakeSortable = ({
     [children]
   );
   const boxRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const indicatorRef = useRef<HTMLDivElement>(null);
 
   if (!children.length) return <></>;
   return (
-    <div>
+    <div ref={containerRef}>
       <div
-        id="indicator"
+        ref={indicatorRef}
         className="styles-indicator"
-        style={{
-          top: indicatorPosition.y,
-        }}
+        // style={{
+        //   top: indicatorPosition.y,
+        // }}
       ></div>
       <div ref={boxRef}>{children}</div>
     </div>
