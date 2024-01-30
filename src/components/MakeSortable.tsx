@@ -35,18 +35,21 @@ const MakeSortable = ({
     unitDistance =
       Number((currentElement as HTMLElement)!.getBoundingClientRect().height) +
       Number(
-        window
-          .getComputedStyle((currentElement as HTMLElement)!)
-          .marginBottom.split("px")[0]
+        document.getElementById("box")!.children[1].getBoundingClientRect().y -
+          (document.getElementById("box")!.children[0].getBoundingClientRect()
+            .y +
+            document.getElementById("box")!.children[0].getBoundingClientRect()
+              .height)
       );
     unitBoxDistance = Number(
       (currentElement as HTMLElement)!.getBoundingClientRect().height
     );
 
     unitGapDistance = Number(
-      window
-        .getComputedStyle((currentElement as HTMLElement)!)
-        .marginBottom.split("px")[0]
+      document.getElementById("box")!.children[1].getBoundingClientRect().y -
+        (document.getElementById("box")!.children[0].getBoundingClientRect().y +
+          document.getElementById("box")!.children[0].getBoundingClientRect()
+            .height)
     );
 
     (currentElement as HTMLElement)!.style.zIndex = "100";
