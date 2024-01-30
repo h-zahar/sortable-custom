@@ -6,8 +6,8 @@ const MakeSortable = ({
   isIndicator = true,
   children,
 }: {
-  array: ReactElement[];
-  onSort: (array: ReactElement[]) => void;
+  array: number[];
+  onSort: (array: number[]) => void;
   isIndicator?: boolean;
   children: ReactElement[];
 }) => {
@@ -51,6 +51,7 @@ const MakeSortable = ({
             (document.getElementById("indicator")!.style.display! = "block"),
           10
         );
+
       isIndicator &&
         setIndicatorPosition({
           x: indicatorPosition.x,
@@ -65,7 +66,15 @@ const MakeSortable = ({
                           Math.floor(
                             Math.abs(startPosition.y - e.clientY) / 100
                           )
-                        )
+                        ) <=
+                      array.length - 1
+                        ? index +
+                          Math.max(
+                            Math.floor(
+                              Math.abs(startPosition.y - e.clientY) / 100
+                            )
+                          )
+                        : array.length - 1
                     ]?.getBoundingClientRect().y
                 ) + 75
               : Number(
@@ -131,7 +140,6 @@ const MakeSortable = ({
         [...document.getElementById("box")!.children].map((elem, i) =>
           elem.setAttribute("data-index", i + "")
         );
-      console.log("Called!!");
 
       return () => {
         [...document.getElementsByClassName("handler")].forEach((elem) => {
