@@ -1,4 +1,5 @@
 import { ReactElement, useEffect, useState } from "react";
+import { TSingleItem } from "../types/item";
 
 const MakeSortable = ({
   array,
@@ -6,8 +7,8 @@ const MakeSortable = ({
   isIndicator = true,
   children,
 }: {
-  array: number[];
-  onSort: (array: number[]) => void;
+  array: TSingleItem[];
+  onSort: (array: TSingleItem[]) => void;
   isIndicator?: boolean;
   children: ReactElement[];
 }) => {
