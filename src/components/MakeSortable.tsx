@@ -51,6 +51,7 @@ const MakeSortable = ({
             (document.getElementById("indicator")!.style.display! = "block"),
           10
         );
+
       isIndicator &&
         setIndicatorPosition({
           x: indicatorPosition.x,
@@ -65,7 +66,15 @@ const MakeSortable = ({
                           Math.floor(
                             Math.abs(startPosition.y - e.clientY) / 100
                           )
-                        )
+                        ) <=
+                      array.length - 1
+                        ? index +
+                          Math.max(
+                            Math.floor(
+                              Math.abs(startPosition.y - e.clientY) / 100
+                            )
+                          )
+                        : array.length - 1
                     ]?.getBoundingClientRect().y
                 ) + 75
               : Number(
