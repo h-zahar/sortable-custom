@@ -1,95 +1,16 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import "./App.css";
 import MakeSortable from "./components/MakeSortable";
+import Item from "./components/Item";
 
 function App() {
-  const [array, setArray] = useState([1, 2, 3, 4, 5]);
-
-  const [items, setItems] = useState(
-    array.map((elem) => (
-      <div
-        key={elem}
-        style={{
-          width: 300,
-          height: 50,
-          marginBottom: 50,
-          background: "lightblue",
-          color: "black",
-          transform: `translate(0px, 0px)`,
-          border: "1px solid black",
-          position: "relative",
-        }}
-      >
-        <div style={{ display: "flex", height: "100%" }}>
-          <div
-            className="handler"
-            style={{
-              height: 50,
-              width: 50,
-              border: "1px solid blue",
-              cursor: "grab",
-            }}
-          ></div>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              height: "100%",
-              width: "100%",
-              userSelect: "none",
-            }}
-          >
-            {elem}
-          </div>
-        </div>
-      </div>
-    ))
-  );
-
-  useEffect(() => {
-    setItems(
-      array.map((elem) => (
-        <div
-          key={elem}
-          style={{
-            width: 300,
-            height: 50,
-            marginBottom: 50,
-            background: "lightblue",
-            color: "black",
-            transform: `translate(0px, 0px)`,
-            border: "1px solid black",
-            position: "relative",
-          }}
-        >
-          <div style={{ display: "flex", height: "100%" }}>
-            <div
-              className="handler"
-              style={{
-                height: 50,
-                width: 50,
-                border: "1px solid blue",
-                cursor: "grab",
-              }}
-            ></div>
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                height: "100%",
-                width: "100%",
-                userSelect: "none",
-              }}
-            >
-              {elem}
-            </div>
-          </div>
-        </div>
-      ))
-    );
-  }, [array]);
+  const [array, setArray] = useState([
+    { id: "1", title: "GG", value: 2 },
+    { id: "2", title: "PG", value: 5 },
+    { id: "3", title: "GP", value: 1 },
+    { id: "4", title: "RG", value: 9 },
+    { id: "5", title: "GR", value: 8 },
+  ]);
 
   return (
     <div>
@@ -100,7 +21,9 @@ function App() {
         onSort={(items) => setArray(items)}
         isIndicator={true}
       >
-        {items}
+        {array.map((item) => {
+          return <Item key={item.id} item={item} />;
+        })}
       </MakeSortable>
     </div>
   );
